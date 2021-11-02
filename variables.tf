@@ -1,5 +1,5 @@
 variable "max" {
-  default = 3
+  default = 2
 }
 
 variable "awsRegion" {
