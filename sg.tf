@@ -85,7 +85,14 @@ resource "aws_security_group_rule" "efs-nfs-egress" {
   source_security_group_id = aws_security_group.efs.id
 
 }
-
+resource "aws_security_group_rule" "webserver-aurora-egress" {
+  security_group_id        = aws_security_group.webserver.id
+  type                     = "egress"
+  protocol                 = "tcp"
+  from_port                = 3306
+  to_port                  = 3306
+  source_security_group_id = aws_security_group.aurora_rds.id
+}
 # EFS
 resource "aws_security_group" "efs" {
   name_prefix = "efs-sg"
@@ -141,7 +148,7 @@ resource "aws_security_group_rule" "alb_ingress_443" {
 }
 resource "aws_security_group_rule" "alb_egress_80" {
   security_group_id        = aws_security_group.alb.id
-  type                     = "ingress"
+  type                     = "egress"
   protocol                 = "tcp"
   from_port                = 80
   to_port                  = 80

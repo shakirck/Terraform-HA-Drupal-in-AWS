@@ -3,7 +3,7 @@ resource "aws_rds_cluster" "default" {
   engine             = "aurora-mysql"
   engine_version     = "5.7.mysql_aurora.2.03.2"
   availability_zones = ["us-east-1a", "us-east-1b"]
-  database_name      = "mydb"
+  database_name      = "bitnami_drupal"
   master_username    = "dbadmin"
   master_password    = "12345678"
   #   backup_retention_period = 0

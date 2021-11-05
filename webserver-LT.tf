@@ -19,7 +19,10 @@ resource "aws_launch_template" "webserver" {
   }
 
   depends_on = [
-    aws_efs_file_system.efs, aws_efs_mount_target.efs-mt
+    aws_efs_file_system.efs,
+    aws_efs_mount_target.efs-mt,
+    aws_rds_cluster.default,
+    aws_rds_cluster_instance.cluster_instances
   ]
 
 
@@ -47,8 +50,17 @@ data "template_file" "user_data_file" {
   template = file("ec2.tpl")
 
   vars = {
-    fsid = "${aws_efs_file_system.efs.id}"
+    fsid        = "${aws_efs_file_system.efs.id}"
+    DB_NAME     = "bitnami_drupal"
+    DB_USERNAME = "dbadmin"
+    DB_PASSWORD = "12345678"
+    DB_HOST     = "${aws_rds_cluster.default.endpoint}"
   }
+  depends_on = [
+    aws_efs_file_system.efs,
+    aws_rds_cluster.default,
+    aws_rds_cluster_instance.cluster_instances
+  ]
 
 }
 

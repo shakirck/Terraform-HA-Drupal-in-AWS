@@ -9,3 +9,8 @@ output "efsip" {
     mounttarget.id => mounttarget.ip_address
   }
 }
+
+output "alb_dns" {
+  value = aws_lb.alb.dns_name
+
+}

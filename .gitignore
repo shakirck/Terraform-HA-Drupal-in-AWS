@@ -51,4 +51,7 @@ terraform.rc
 .ionide
 
 tfconv
-drupal
+drupal.pem
+*.sh
+test.txt
+*.php
