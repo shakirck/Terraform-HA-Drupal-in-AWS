@@ -1,4 +1,6 @@
 resource "aws_lb" "alb" {
+  name = "drupal-lb-tf"
+
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb.id]
@@ -57,3 +59,19 @@ resource "aws_lb_listener" "alb_http_redirect" {
     target_group_arn = aws_lb_target_group.alb_targets.arn
   }
 }
+
+# resource "aws_lb_cookie_stickiness_policy" "drupal" {
+#   name                     = "boom"
+#   load_balancer            = aws_lb.alb.name
+#   lb_port                  = 80
+#   cookie_expiration_period = 300000
+# }
+
+# resource "aws_lb_cookie_stickiness_policy" "drupalhttps" {
+#   name                     = "boom"
+#   load_balancer            = aws_lb.alb.name
+#   lb_port                  = 443
+#   cookie_expiration_period = 300000
+# }
+
+

@@ -50,7 +50,8 @@ data "template_file" "user_data_file" {
   template = file("ec2.tpl")
 
   vars = {
-    fsid        = "${aws_efs_file_system.efs.id}"
+    fsid1       = "${aws_efs_file_system.efs.id}"
+    fsid2       = "${aws_efs_file_system.efs2.id}"
     DB_NAME     = "bitnami_drupal"
     DB_USERNAME = "dbadmin"
     DB_PASSWORD = "12345678"
