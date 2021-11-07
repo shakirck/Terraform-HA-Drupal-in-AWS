@@ -53,6 +53,25 @@ then
     sudo drush sql:dump --result-file=./back.sql 
     sudo mkdir /efs/backups 
     sudo mv /opt/bitnami/drupal/back.sql /efs/backups/back.sql 
+
+    sed -i '806,815d' /bitnami/drupal/sites/default/settings.php 
+    echo "updating settings.php"
+    sudo tee ./db.data <<EOF
+    \$databases['default']['default'] = array (
+    'database' => '${DB_NAME}',
+    'username' => '${DB_USERNAME}',
+    'password' => '${DB_PASSWORD}',
+    'prefix' => '',
+    'host' => '${DB_HOST}',
+    'port' => '3306',
+    'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
+    'driver' => 'mysql',
+    );
+EOF
+
+    sudo bash -c 'cat db.data >> bitnami/drupal/sites/default/settings.php' 
+
+
     sudo cp -r /bitnami/drupal /bitnami/drupalcopy/
     sudo cp -r /opt/bitnami/drupal /opt/bitnami/drupalcopy2/
     sudo rm -rf /bitnami/drupal
@@ -90,7 +109,12 @@ then
     sudo drush -y config-set system.performance css.preprocess 0
     sudo drush -y config-set system.performance js.preprocess 0
 
-sed -i '806,815d' /bitnami/drupal/sites/default/settings.php 
+
+ sudo chown -R  daemon:root /bitnami/drupal
+sudo chown -R  bitnami:daemon /opt/bitnami/drupal
+else
+    echo "Backup already in EFS"    
+    sed -i '806,815d' /bitnami/drupal/sites/default/settings.php 
 echo "updating settings.php"
 sudo tee ./db.data <<EOF
  \$databases['default']['default'] = array (
@@ -105,10 +129,6 @@ sudo tee ./db.data <<EOF
 );
 EOF
 sudo bash -c 'cat db.data >> bitnami/drupal/sites/default/settings.php' 
- sudo chown -R  daemon:root /bitnami/drupal
-sudo chown -R  bitnami:daemon /opt/bitnami/drupal
-else
-    echo "Backup already in EFS"    
     sudo cp -r /bitnami/drupal /bitnami/drupalcopy/
     sudo cp -r /opt/bitnami/drupal /opt/bitnami/drupalcopy2/
     sudo rm -rf /bitnami/drupal
