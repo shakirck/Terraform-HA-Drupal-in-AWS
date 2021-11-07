@@ -8,7 +8,6 @@ resource "aws_lb" "alb" {
 
   #   idle_timeout = var.LBTimeOut
   #   ip_address_type = var.private_mode ? "ipv4" : "dualstack"
-
   tags = { Name : "Drupal-Load_Balancer" }
 
 }
@@ -29,6 +28,12 @@ resource "aws_lb_target_group" "alb_targets" {
     unhealthy_threshold = 5
     # matcher             = "200"
   }
+  stickiness {
+    type        = "lb_cookie"
+    enabled     = true
+    cookie_name = "boom"
+  }
+
 
   tags = { Name : "drupal-lb-target-group" }
 

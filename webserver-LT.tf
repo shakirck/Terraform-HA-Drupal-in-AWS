@@ -51,7 +51,7 @@ data "template_file" "user_data_file" {
 
   vars = {
     fsid1       = "${aws_efs_file_system.efs.id}"
-    fsid2       = "${aws_efs_file_system.efs2.id}"
+    fsid2       = "NOT NEEDED FOR NOW TO BE REMOVED LATER"
     DB_NAME     = "bitnami_drupal"
     DB_USERNAME = "dbadmin"
     DB_PASSWORD = "12345678"

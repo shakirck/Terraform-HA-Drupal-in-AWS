@@ -73,18 +73,18 @@ EOF
 
 
     sudo cp -r /bitnami/drupal /bitnami/drupalcopy/
-    sudo cp -r /opt/bitnami/drupal /opt/bitnami/drupalcopy2/
+    # sudo cp -r /opt/bitnami/drupal /opt/bitnami/drupalcopy2/
     sudo rm -rf /bitnami/drupal
-    sudo rm -rf /opt/bitnami/drupal
+    # sudo rm -rf /opt/bitnami/drupal
     sudo mkdir /bitnami/drupal
-    sudo mkdir /opt/bitnami/drupal
+    # sudo mkdir /opt/bitnami/drupal
     sudo mount -t efs -o tls ${fsid1}:/ /bitnami/drupal
-    sudo mount -t efs -o tls ${fsid2}:/ /opt/bitnami/drupal
+    # sudo mount -t efs -o tls ${fsid2}:/ /opt/bitnami/drupal
     logger "coppying to drupal nfs"
     echo "coppying to drupal nfs"
 
     sudo cp -r /bitnami/drupalcopy/* /bitnami/drupal 
-    sudo cp -r /opt/bitnami/drupalcopy2/* /opt/bitnami/drupal 
+    # sudo cp -r /opt/bitnami/drupalcopy2/* /opt/bitnami/drupal 
     sudo chmod -R  daemon:daemon /bitnami/drupal
 
     #  echo "Backup and copying sql data to EFS"  || \
@@ -111,7 +111,7 @@ EOF
 
 
  sudo chown -R  daemon:root /bitnami/drupal
-sudo chown -R  bitnami:daemon /opt/bitnami/drupal
+# sudo chown -R  bitnami:daemon /opt/bitnami/drupal
 else
     echo "Backup already in EFS"    
     sed -i '806,815d' /bitnami/drupal/sites/default/settings.php 
@@ -130,22 +130,22 @@ sudo tee ./db.data <<EOF
 EOF
 sudo bash -c 'cat db.data >> bitnami/drupal/sites/default/settings.php' 
     sudo cp -r /bitnami/drupal /bitnami/drupalcopy/
-    sudo cp -r /opt/bitnami/drupal /opt/bitnami/drupalcopy2/
+    # sudo cp -r /opt/bitnami/drupal /opt/bitnami/drupalcopy2/
     sudo rm -rf /bitnami/drupal
-    sudo rm -rf /opt/bitnami/drupal
+    # sudo rm -rf /opt/bitnami/drupal
     sudo mkdir /bitnami/drupal
-    sudo mkdir /opt/bitnami/drupal
+    # sudo mkdir /opt/bitnami/drupal
     sudo mount -t efs -o tls ${fsid1}:/ /bitnami/drupal
-    sudo mount -t efs -o tls ${fsid2}:/ /opt/bitnami/drupal
+    # sudo mount -t efs -o tls ${fsid2}:/ /opt/bitnami/drupal
     logger "coppying to drupal nfs"
     echo "coppying to drupal nfs"
 
     sudo cp -r /bitnami/drupalcopy/* /bitnami/drupal 
-    sudo cp -r /opt/bitnami/drupalcopy2/* /opt/bitnami/drupal 
+    # sudo cp -r /opt/bitnami/drupalcopy2/* /opt/bitnami/drupal 
 
 
     sudo chown -R  daemon:root /bitnami/drupal
-    sudo chown -R  bitnami:daemon /opt/bitnami/drupal
+    # sudo chown -R  bitnami:daemon /opt/bitnami/drupal
     
     sudo drush cr
     sudo drush cc css-js
@@ -180,4 +180,4 @@ sudo drush cc css-js
 sudo drush -y config-set system.performance css.preprocess 0
 sudo drush -y config-set system.performance js.preprocess 0
 sudo chown -R  daemon:root /bitnami/drupal
-sudo chown -R  bitnami:daemon /opt/bitnami/drupal
+# sudo chown -R  bitnami:daemon /opt/bitnami/drupal
