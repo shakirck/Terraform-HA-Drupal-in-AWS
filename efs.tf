@@ -1,8 +1,8 @@
 
 resource "aws_efs_file_system" "efs" {
-  creation_token   = "drupal-efs"
-  performance_mode = "generalPurpose"
-  encrypted        = "true"
+  creation_token   = var.EfsCreationToken
+  performance_mode = var.EfsPerformanceMode
+  encrypted        = var.IsEfsEncrypted
   tags = {
     Name = "LAMP EFS Shared Filesystem For Drupal"
   }
