@@ -82,7 +82,109 @@ variable "IsEfsEncrypted" {
   type = string
 }
 
+#LB
+variable "LoadBalancerName" {
+  type = string
+}
 
+variable "LoadBalancerType" {
+  type = string
+}
+
+variable "AlbTargetNamePrefix" {
+  type = string
+}
+
+variable "AlbPort" {
+  type = number
+}
+variable "AlbProtocol" {
+  type = string
+}
+variable "AlbTargetType" {
+
+  type = string
+}
+variable "AlbHealthCheckProtocol" {
+  type = string
+}
+variable "AlbSticknessType" {
+  type = string
+}
+variable "AlbStickinessCookieName" {
+  type = string
+}
+variable "EnableAlbStickiness" {
+  type = bool
+}
+
+variable "AlbListenerHttpsPort" {
+  type = number
+}
+variable "AlbListenerHttpsProtocol" {
+  type = string
+}
+variable "AlbListenerHttpsSslPolicy" {
+  type = string
+}
+variable "AlbListenerDefaultAction" {
+  type = string
+}
+
+variable "AlbListenerHttpPort" {
+  type = number
+}
+variable "AlbListenerHttpProtocol" {
+  type = string
+}
+
+
+
+
+
+# Route
+variable "HostedZoneName" {
+  type = string
+}
+
+variable "Route53RecordName" {
+  type = string
+}
+variable "Route53RecordType" {
+  type = string
+}
+variable "Route53RecordTTL" {
+  type = string
+}
+
+
+
+# SG
+variable "BastionIngressCIDR" {
+  type = list(string)
+}
+
+
+
+# vpc
+variable "vpcCIDR" {
+  type = string
+}
+variable "vpcInstanceTenancy" {
+  type = string
+}
+
+
+
+
+# route tables
+variable "PublicRouteTableCIDR" {
+  type = string
+}
+
+variable "PrivateRouteTableCIDR" {
+  type = string
+}
 
 
 

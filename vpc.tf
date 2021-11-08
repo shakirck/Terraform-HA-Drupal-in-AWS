@@ -4,10 +4,10 @@ data "aws_availability_zones" "available" {
 }
 
 resource "aws_vpc" "vpc" {
-  cidr_block           = "10.0.0.0/16"
+  cidr_block           = var.vpcCIDR
   enable_dns_hostnames = true
   enable_dns_support   = true
-  instance_tenancy     = "default"
+  instance_tenancy     = var.vpcInstanceTenancy
   tags = {
     Environment = "drupal"
     Name        = "drupal-vpc-01"
@@ -54,7 +54,7 @@ resource "aws_subnet" "private_subnets" {
 resource "aws_route_table" "public_rt" {
   vpc_id = aws_vpc.vpc.id
   route {
-    cidr_block = "0.0.0.0/0" # Traffic from Public Subnet reaches Internet via Internet Gateway
+    cidr_block = var.PublicRouteTableCIDR # Traffic from Public Subnet reaches Internet via Internet Gateway
     gateway_id = aws_internet_gateway.igw.id
   }
   tags = {
@@ -67,7 +67,7 @@ resource "aws_route_table" "private_rt" {
   count  = var.max
   vpc_id = aws_vpc.vpc.id
   route {
-    cidr_block = "0.0.0.0/0"
+    cidr_block = var.PrivateRouteTableCIDR
     gateway_id = aws_nat_gateway.main_nat[count.index].id
   }
 
