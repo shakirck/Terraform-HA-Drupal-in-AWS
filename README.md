@@ -66,7 +66,7 @@ ssh-add -D
 ```
 ### Access Drupal Site
 
-Your drupal website can be  accessed from  your-domain.com
+Your drupal website can be  accessed from  your-domain.com 3-5 mins after deploying.
 
 ### Destroy Environment
 
