@@ -10,7 +10,7 @@ resource "aws_efs_file_system" "efs" {
 }
 
 resource "aws_efs_mount_target" "efs-mt" {
-  count           = var.max
+  count           = var.MaxInstances
   file_system_id  = aws_efs_file_system.efs.id
   subnet_id       = aws_subnet.private_subnets[count.index].id
   security_groups = [aws_security_group.efs.id]
@@ -37,7 +37,7 @@ resource "aws_efs_access_point" "efs-access-point" {
 # }
 
 # resource "aws_efs_mount_target" "efs2-mt" {
-#   count           = var.max
+#   count           = var.MaxInstances
 #   file_system_id  = aws_efs_file_system.efs2.id
 #   subnet_id       = aws_subnet.private_subnets[count.index].id
 #   security_groups = [aws_security_group.efs.id]

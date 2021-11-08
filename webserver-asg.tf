@@ -7,17 +7,17 @@ resource "aws_autoscaling_group" "webserver" {
 
 
   # All the same to keep at a fixed size
-  desired_capacity = var.max
-  min_size         = var.max
-  max_size         = var.max
+  desired_capacity = var.DesiredInstanceCapacity
+  min_size         = var.MinInstances
+  max_size         = var.MaxInstances
 
   # AKA the subnets to launch resources in 
   vpc_zone_identifier = aws_subnet.private_subnets.*.id
 
-  health_check_grace_period = 300
-  health_check_type         = "EC2"
-  termination_policies      = ["OldestLaunchTemplate"]
-  wait_for_capacity_timeout = 0
+  health_check_grace_period = var.InstanceHealthCheckGracePeriod
+  health_check_type         = var.InstanceHealthCheckType
+  termination_policies      = var.InstanceTerminaitonPolicies
+  wait_for_capacity_timeout = var.InstanceHealthCheckTimeout
 
   target_group_arns = [aws_lb_target_group.alb_targets.arn]
   depends_on = [

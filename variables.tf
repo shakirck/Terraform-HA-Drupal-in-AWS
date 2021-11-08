@@ -186,19 +186,40 @@ variable "PrivateRouteTableCIDR" {
   type = string
 }
 
+# Webserver asg
 
 
-variable "max" {
-  default = 2
+variable "MaxInstances" {
+  type = number
+}
+variable "MinInstances" {
+  type = number
+}
+variable "DesiredInstanceCapacity" {
+  type = number
+}
+variable "InstanceHealthCheckType" {
+  type = string
+}
+variable "InstanceTerminaitonPolicies" {
+  type = list(string)
+}
+variable "InstanceHealthCheckGracePeriod" {
+  type = number
+}
+variable "InstanceHealthCheckTimeout" {
+  type = number
 }
 
+# common
 variable "awsRegion" {
-  default = "us-east-1"
+
+  type = string
 }
 
 variable "GenerateNewKeyPair" {
-  default = true
+  type = bool
 }
 variable "KeyPairName" {
-  default = "drupal"
+  type = string
 }
