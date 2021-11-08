@@ -1,0 +1,102 @@
+# common
+awsRegion = "us-east-1"
+GenerateNewKeyPair = true
+KeyPairName = "myKeyPair"
+
+#Bastion
+
+BastionCount = 2
+BastionInstanceType = "t2.micro"
+BastionAsgNamePrefix = "Bastion-ASG"
+BastionHealthCheckType = "EC2"
+BastionTerminationPolicies = ["OldestLaunchTemplate"]
+
+
+# acm
+
+AcmCertDomain = "login.hyremaster.com"
+AcmCertStatuses = ["ISSUED"]
+
+# Aurora
+RdsClusterIdentifier = "aurora-cluster-demo"
+RdsEngine = "aurora-mysql"
+RdsEngineVersion = "5.7.mysql_aurora.2.03.2"
+RdsAvailabilityZones = ["us-east-1a", "us-east-1b"]
+RdsDatabaseName = "bitnami_drupal"
+RdsMasterPassword = "12345678"
+RdsMasterUsername = "dbadmin"
+
+RdsInstanceCount =  2
+RdsIntanceIdentifierPrefix = "drupal-aurora"
+RdsInstanceClass = "db.t2.small"
+RdsSubnetGroupName = "aurora-drupal-subnet-gruoup"
+
+# bitnami ami
+DrupalAmiOwner = [ "679593333241" ]
+
+FilterNameValues = ["bitnami-drupal-9.2.6-0-*"]
+
+# Efs
+EfsCreationToken = "drupal-efs"
+EfsPerformanceMode = "generalPurpose"
+IsEfsEncrypted = "true"
+
+
+ 
+# LB
+LoadBalancerName = "drupal-server-lb"
+LoadBalancerType = "application"
+
+AlbTargetNamePrefix = "drp-lb"
+
+AlbPort = 80
+AlbProtocol = "HTTP"
+AlbTargetType = "instance"
+AlbHealthCheckProtocol = "HTTP"
+EnableAlbStickiness = true
+AlbStickinessCookieName = "boom"
+AlbSticknessType = "lb_cookie"
+
+
+AlbListenerDefaultAction = "forward"
+AlbListenerHttpsPort = 443
+AlbListenerHttpsProtocol = "HTTPS"
+AlbListenerHttpsSslPolicy = "ELBSecurityPolicy-FS-2018-06"
+
+ AlbListenerHttpPort = 80
+AlbListenerHttpProtocol = "HTTP"
+ 
+# route
+HostedZoneName = "hyremaster.com"
+Route53RecordName = "login.hyremaster.com"
+Route53RecordType = "CNAME"
+Route53RecordTTL = "300"
+
+
+
+
+# SG
+
+BastionIngressCIDR = ["0.0.0.0/0"]
+# vpc
+vpcCIDR = "10.0.0.0/16"
+vpcInstanceTenancy = "default"
+
+# route tables
+
+PublicRouteTableCIDR ="0.0.0.0/0"
+PrivateRouteTableCIDR ="0.0.0.0/0"
+
+MaxInstances = 2
+MinInstances = 2
+DesiredInstanceCapacity = 2
+InstanceHealthCheckType = "EC2"
+InstanceTerminaitonPolicies = [ "OldestLaunchTemplate" ]
+InstanceHealthCheckGracePeriod = 300
+InstanceHealthCheckTimeout = 0
+
+
+
+
+
+

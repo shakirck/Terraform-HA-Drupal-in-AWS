@@ -1,5 +1,5 @@
 resource "aws_autoscaling_group" "bastion" {
-  name_prefix = " bastion-asg"
+  name_prefix = var.BastionAsgNamePrefix
 
   launch_template {
     id      = aws_launch_template.bastion.id
@@ -8,16 +8,15 @@ resource "aws_autoscaling_group" "bastion" {
 
 
   # All the same to keep at a fixed size
-  desired_capacity = var.max
-  min_size         = var.max
-  max_size         = var.max
+  desired_capacity = var.BastionCount
+  min_size         = var.BastionCount
+  max_size         = var.BastionCount
 
-  # AKA the subnets to launch resources in 
   vpc_zone_identifier = aws_subnet.public_subnets.*.id
 
   health_check_grace_period = 300
-  health_check_type         = "EC2"
-  termination_policies      = ["OldestLaunchTemplate"]
+  health_check_type         = var.BastionHealthCheckType
+  termination_policies      = var.BastionTerminationPolicies
   wait_for_capacity_timeout = 0
 
 

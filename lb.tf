@@ -1,8 +1,8 @@
 resource "aws_lb" "alb" {
-  name = "drupal-lb-tf"
+  name = var.LoadBalancerName
 
   internal           = false
-  load_balancer_type = "application"
+  load_balancer_type = var.LoadBalancerType
   security_groups    = [aws_security_group.alb.id]
   subnets            = aws_subnet.public_subnets.*.id
 
@@ -12,26 +12,26 @@ resource "aws_lb" "alb" {
 
 }
 resource "aws_lb_target_group" "alb_targets" {
-  name_prefix = "drp-lb"
-  port        = 80
-  protocol    = "HTTP"
+  name_prefix = var.AlbTargetNamePrefix
+  port        = var.AlbPort
+  protocol    = var.AlbProtocol
   vpc_id      = aws_vpc.vpc.id
   #   deregistration_delay = 30
-  target_type = "instance"
+  target_type = var.AlbTargetType
 
   health_check {
     enabled             = true
     interval            = 30
-    protocol            = "HTTP"
+    protocol            = var.AlbHealthCheckProtocol
     timeout             = 5
     healthy_threshold   = 2
     unhealthy_threshold = 5
     # matcher             = "200"
   }
   stickiness {
-    type        = "lb_cookie"
-    enabled     = true
-    cookie_name = "boom"
+    type        = var.AlbSticknessType
+    enabled     = var.EnableAlbStickiness
+    cookie_name = var.AlbStickinessCookieName
   }
 
 
@@ -41,26 +41,26 @@ resource "aws_lb_target_group" "alb_targets" {
 }
 resource "aws_lb_listener" "alb_http" {
   load_balancer_arn = aws_lb.alb.arn
-  port              = 443
-  protocol          = "HTTPS"
-  ssl_policy        = "ELBSecurityPolicy-FS-2018-06"
+  port              = var.AlbListenerHttpsPort
+  protocol          = var.AlbListenerHttpsProtocol
+  ssl_policy        = var.AlbListenerHttpsSslPolicy
   certificate_arn   = data.aws_acm_certificate.drupal.arn
 
 
   default_action {
-    type             = "forward"
+    type             = var.AlbListenerDefaultAction
     target_group_arn = aws_lb_target_group.alb_targets.arn
   }
 }
 
 resource "aws_lb_listener" "alb_http_redirect" {
   load_balancer_arn = aws_lb.alb.arn
-  port              = 80
-  protocol          = "HTTP"
+  port              = var.AlbListenerHttpPort
+  protocol          = var.AlbListenerHttpProtocol
 
 
   default_action {
-    type             = "forward"
+    type             = var.AlbListenerDefaultAction
     target_group_arn = aws_lb_target_group.alb_targets.arn
   }
 }

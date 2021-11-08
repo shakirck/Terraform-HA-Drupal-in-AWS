@@ -1,6 +1,6 @@
 resource "aws_launch_template" "bastion" {
   image_id      = data.aws_ami.latest-ubuntu.id
-  instance_type = "t2.micro"
+  instance_type = var.BastionInstanceType
   user_data     = ""
   key_name      = var.KeyPairName
   network_interfaces {
