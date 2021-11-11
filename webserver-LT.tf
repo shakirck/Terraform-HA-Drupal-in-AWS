@@ -1,6 +1,6 @@
 resource "aws_launch_template" "webserver" {
   image_id      = data.aws_ami.bitnami.id
-  instance_type = "t2.micro"
+  instance_type = var.WebServerInstanceType
   user_data     = base64encode(data.template_file.user_data_file.rendered)
 
 
@@ -29,19 +29,10 @@ resource "aws_launch_template" "webserver" {
   tag_specifications {
     resource_type = "instance"
 
-    tags = {
-      Name = "Webserver"
-    }
+    tags = var.WebServerInstanceTags
   }
 
-  tags = {
-
-    Name : "drupal-webserver-lt",
-
-    Project : "drupal"
-
-  }
-
+  tags = var.WebServerASGTags
 
 }
 
@@ -52,9 +43,9 @@ data "template_file" "user_data_file" {
   vars = {
     fsid1       = "${aws_efs_file_system.efs.id}"
     fsid2       = "NOT NEEDED FOR NOW TO BE REMOVED LATER"
-    DB_NAME     = "bitnami_drupal"
-    DB_USERNAME = "dbadmin"
-    DB_PASSWORD = "12345678"
+    DB_NAME     = var.RdsDatabaseName
+    DB_USERNAME = var.RdsMasterUsername
+    DB_PASSWORD = var.RdsMasterPassword
     DB_HOST     = "${aws_rds_cluster.default.endpoint}"
   }
   depends_on = [

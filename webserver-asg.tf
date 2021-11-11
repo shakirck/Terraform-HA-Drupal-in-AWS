@@ -1,5 +1,5 @@
 resource "aws_autoscaling_group" "webserver" {
-  name_prefix = " webserver-asg"
+  name_prefix = var.WebServerASGNamePrefix
   launch_template {
     id      = aws_launch_template.webserver.id
     version = aws_launch_template.webserver.latest_version
@@ -25,8 +25,8 @@ resource "aws_autoscaling_group" "webserver" {
   ]
 
   tag {
-    key                 = "Name"
-    value               = "webserver-asg"
+    key                 = var.WebServerASGTagKey
+    value               = var.WebServerASGTagValue
     propagate_at_launch = true
   }
 }

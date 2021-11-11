@@ -5,22 +5,16 @@ data "aws_availability_zones" "available" {
 
 resource "aws_vpc" "vpc" {
   cidr_block           = var.vpcCIDR
-  enable_dns_hostnames = true
-  enable_dns_support   = true
+  enable_dns_hostnames = var.VPCEnableDnsHostnames
+  enable_dns_support   = var.VPCEnableDnsSupport
   instance_tenancy     = var.vpcInstanceTenancy
-  tags = {
-    Environment = "drupal"
-    Name        = "drupal-vpc-01"
-  }
+  tags                 = var.VPCTags
 }
 
 
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.vpc.id
-  tags = {
-    Environment = "drupal"
-    Name        = "drupal-igw-01"
-  }
+  tags   = var.IGWTags
 }
 
 resource "aws_subnet" "public_subnets" {
@@ -34,9 +28,7 @@ resource "aws_subnet" "public_subnets" {
   map_public_ip_on_launch = true
 
   assign_ipv6_address_on_creation = false
-  tags = {
-    Name = "main-public-subnets"
-  }
+  tags                            = var.PublicSubnetTags
 }
 resource "aws_subnet" "private_subnets" {
   vpc_id = aws_vpc.vpc.id
@@ -45,9 +37,7 @@ resource "aws_subnet" "private_subnets" {
 
   cidr_block        = cidrsubnet(aws_vpc.vpc.cidr_block, 4, count.index + var.MaxInstances)
   availability_zone = data.aws_availability_zones.available.names[count.index]
-  tags = {
-    Name = "main-private-rt"
-  }
+  tags              = var.PrivateSubnetTags
 }
 
 # route tables
@@ -57,11 +47,8 @@ resource "aws_route_table" "public_rt" {
     cidr_block = var.PublicRouteTableCIDR # Traffic from Public Subnet reaches Internet via Internet Gateway
     gateway_id = aws_internet_gateway.igw.id
   }
-  tags = {
-    Name = "main-public-rt"
-  }
+  tags = var.PublicRouteTableTags
 }
-
 
 resource "aws_route_table" "private_rt" {
   count  = var.MaxInstances
@@ -71,9 +58,7 @@ resource "aws_route_table" "private_rt" {
     gateway_id = aws_nat_gateway.main_nat[count.index].id
   }
 
-  tags = {
-    Name = "main-private-rt"
-  }
+  tags = var.PrivateRouteTableTags
 }
 
 
@@ -89,9 +74,7 @@ resource "aws_nat_gateway" "main_nat" {
   allocation_id = aws_eip.nat_eip[count.index].id
   subnet_id     = aws_subnet.public_subnets[count.index].id
 
-  tags = {
-    Name = "gw NAT"
-  }
+  tags = var.NATGatewayTags
 
   # To ensure proper ordering, it is recommended to add an explicit dependency
   # on the Internet Gateway for the VPC.

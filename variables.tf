@@ -17,6 +17,9 @@ variable "BastionHealthCheckType" {
 variable "BastionTerminationPolicies" {
   type = list(string)
 }
+variable "BastionWaitForCapacityTimeout" {
+  type = number
+}
 variable "BastionHealthCheckGracePeriod" {
   type = number
 }
@@ -130,6 +133,18 @@ variable "AlbTargetType" {
 
   type = string
 }
+variable "AlbHealthCheckInterval" {
+  type = number
+}
+variable "AlbHealthCheckTimeout" {
+  type = number
+}
+variable "AlbHealthyThreshold" {
+  type = number
+}
+variable "AlbUnhealthyThreshold" {
+  type = number
+}
 variable "AlbHealthCheckProtocol" {
   type = string
 }
@@ -143,6 +158,9 @@ variable "EnableAlbStickiness" {
   type = bool
 }
 
+variable "AlbTargetTags" {
+  type = map(string)
+}
 variable "AlbListenerHttpsPort" {
   type = number
 }
@@ -231,6 +249,174 @@ variable "WebServerSecurityGroupDescription" {
   type = string
 }
 
+variable "WebServerSSHIngressFromPort" {
+  type = number
+}
+variable "WebServerSSHIngressToPort" {
+  type = number
+}
+variable "WebServerSSHIngressProtocol" {
+  type = string
+}
+
+variable "WebServer443IngressFromPort" {
+  type = number
+}
+variable "WebServer443IngressToPort" {
+  type = number
+}
+variable "WebServer443IngressProtocol" {
+  type = string
+}
+variable "WebServer80IngressFromPort" {
+  type = number
+}
+variable "WebServer80IngressToPort" {
+  type = number
+}
+variable "WebServer80IngressProtocol" {
+  type = string
+}
+
+
+variable "WebServer80EgressFromPort" {
+  type = number
+}
+variable "WebServer80EgressToPort" {
+  type = number
+}
+variable "WebServer80EgressProtocol" {
+  type = string
+}
+variable "WebServer80EgressCIDR" {
+  type = list(string)
+}
+
+variable "WebServer443EgressFromPort" {
+  type = number
+}
+variable "WebServer443EgressToPort" {
+  type = number
+}
+variable "WebServer443EgressProtocol" {
+  type = string
+}
+variable "WebServer443EgressCIDR" {
+  type = list(string)
+}
+
+
+variable "WebServerEFSEgressFromPort" {
+  type = number
+}
+variable "WebServerEFSEgressToPort" {
+  type = number
+}
+variable "WebServerEFSEgressProtocol" {
+  type = string
+}
+
+
+variable "WebServerAuroraEgressFromPort" {
+  type = number
+}
+variable "WebServerAuroraEgressToPort" {
+  type = number
+}
+variable "WebServerAuroraEgressProtocol" {
+  type = string
+}
+
+variable "EFSSecurityGroupNamePrefix" {
+  type = string
+}
+variable "EFSSecurityGroupDescription" {
+  type = string
+}
+
+variable "EFSSecurityGroupIngressFromPort" {
+  type = number
+}
+variable "EFSSecurityGroupIngressToPort" {
+  type = number
+}
+variable "EFSSecurityGroupIngressProtocol" {
+  type = string
+}
+
+
+variable "AuroraSecurityGroupNamePrefix" {
+  type = string
+}
+variable "AuroraSecurityGroupDescription" {
+  type = string
+}
+
+variable "AuroraSecurityGroupIngressFromPort" {
+  type = number
+}
+variable "AuroraSecurityGroupIngressToPort" {
+  type = number
+}
+variable "AuroraSecurityGroupIngressProtocol" {
+  type = string
+}
+
+variable "ALBSecurityGroupNamePrefix" {
+  type = string
+}
+variable "ALBSecurityGroupDescription" {
+  type = string
+}
+
+variable "ALBSecurityGroup80IngressFromPort" {
+  type = number
+}
+variable "ALBSecurityGroup80IngressToPort" {
+  type = number
+}
+variable "ALBSecurityGroup80IngressProtocol" {
+  type = string
+}
+variable "ALBSecurityGroup80IngressCIDR" {
+  type = list(string)
+}
+variable "ALBSecurityGroup443IngressFromPort" {
+  type = number
+}
+variable "ALBSecurityGroup443IngressToPort" {
+  type = number
+}
+variable "ALBSecurityGroup443IngressProtocol" {
+  type = string
+}
+variable "ALBSecurityGroup443IngressCIDR" {
+  type = list(string)
+}
+
+variable "ALBSecurityGroup80EgressFromPort" {
+  type = number
+}
+variable "ALBSecurityGroup80EgressToPort" {
+  type = number
+}
+variable "ALBSecurityGroup80EgressProtocol" {
+  type = string
+}
+
+
+
+variable "ALBSecurityGroup443EgressFromPort" {
+  type = number
+}
+variable "ALBSecurityGroup443EgressToPort" {
+  type = number
+}
+variable "ALBSecurityGroup443EgressProtocol" {
+  type = string
+}
+
+
 
 # vpc
 variable "vpcCIDR" {
@@ -240,17 +426,51 @@ variable "vpcInstanceTenancy" {
   type = string
 }
 
-
-
+variable "VPCEnableDnsSupport" {
+  type = bool
+}
+variable "VPCEnableDnsHostnames" {
+  type = bool
+}
+variable "VPCTags" {
+  type = map(string)
+}
 
 # route tables
 variable "PublicRouteTableCIDR" {
   type = string
 }
+variable "PublicRouteTableTags" {
+  type = map(string)
+}
 
 variable "PrivateRouteTableCIDR" {
   type = string
 }
+
+variable "PrivateRouteTableTags" {
+  type = map(string)
+}
+# internet gateway
+
+variable "IGWTags" {
+  type = map(string)
+}
+
+# Nat gateway
+variable "NATGatewayTags" {
+  type = map(string)
+}
+# Subnets
+
+variable "PublicSubnetTags" {
+  type = map(string)
+}
+
+variable "PrivateSubnetTags" {
+  type = map(string)
+}
+
 
 # Webserver asg
 
@@ -276,7 +496,25 @@ variable "InstanceHealthCheckGracePeriod" {
 variable "InstanceHealthCheckTimeout" {
   type = number
 }
+variable "WebServerASGTagKey" {
+  type = string
+}
+variable "WebServerASGTagValue" {
+  type = string
+}
+variable "WebServerASGNamePrefix" {
+  type = string
+}
 
+variable "WebServerInstanceType" {
+  type = string
+}
+variable "WebServerInstanceTags" {
+  type = map(string)
+}
+variable "WebServerASGTags" {
+  type = map(string)
+}
 # common
 variable "awsRegion" {
 
@@ -287,5 +525,17 @@ variable "GenerateNewKeyPair" {
   type = bool
 }
 variable "KeyPairName" {
+  type = string
+}
+
+# iam
+variable "IAMRoleTags" {
+  type = map(string)
+}
+variable "IAMRoleName" {
+  type = string
+}
+
+variable "IAMInstanceProfileName" {
   type = string
 }

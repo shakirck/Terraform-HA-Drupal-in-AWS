@@ -1,5 +1,5 @@
 data "aws_route53_zone" "selected" {
-  name = "hyremaster.com"
+  name = var.HostedZoneName
 }
 resource "aws_route53_record" "www" {
   zone_id = data.aws_route53_zone.selected.zone_id

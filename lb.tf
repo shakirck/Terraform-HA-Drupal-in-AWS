@@ -21,11 +21,11 @@ resource "aws_lb_target_group" "alb_targets" {
 
   health_check {
     enabled             = true
-    interval            = 30
+    interval            = var.AlbHealthCheckInterval
     protocol            = var.AlbHealthCheckProtocol
-    timeout             = 5
-    healthy_threshold   = 2
-    unhealthy_threshold = 5
+    timeout             = var.AlbHealthCheckTimeout
+    healthy_threshold   = var.AlbHealthyThreshold
+    unhealthy_threshold = var.AlbUnhealthyThreshold
     # matcher             = "200"
   }
   stickiness {
@@ -35,7 +35,7 @@ resource "aws_lb_target_group" "alb_targets" {
   }
 
 
-  tags = { Name : "drupal-lb-target-group" }
+  tags = var.AlbTargetTags
 
 
 }

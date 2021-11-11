@@ -97,7 +97,7 @@ EOF
     # sudo mount -t efs -o tls ${fsid1}:/ /bitnami/drupal
     # sudo mv /bitnami/drupalcopy/* /bitnami/drupal 
     echo "updating rds"
-    sudo mysql -u dbadmin -p'${DB_PASSWORD}' -h ${DB_HOST} -D bitnami_drupal < /efs/backups/back.sql
+    sudo mysql -u ${DB_USERNAME} -p'${DB_PASSWORD}' -h ${DB_HOST} -D ${DB_NAME} < /efs/backups/back.sql
 
 
     echo "Backup and copying sql data to EFS"

@@ -17,7 +17,7 @@ resource "aws_autoscaling_group" "bastion" {
   health_check_grace_period = var.BastionHealthCheckGracePeriod
   health_check_type         = var.BastionHealthCheckType
   termination_policies      = var.BastionTerminationPolicies
-  wait_for_capacity_timeout = 0
+  wait_for_capacity_timeout = var.BastionWaitForCapacityTimeout
 
 
 
