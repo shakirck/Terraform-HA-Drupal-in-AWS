@@ -53,7 +53,7 @@ Ec2 instances can only   be  accessed by a bastion host.
 connect to a bastion host by 
 ```sh
     ssh-add ./myKeyPair
-    ssh -A ubuntu@your-bastion-public-ipv4-dns
+    ssh -A ec2-user@your-bastion-public-ipv4-dns
 ```
 Connect to a ec2 from inside a bastion  host by 
 ```sh
