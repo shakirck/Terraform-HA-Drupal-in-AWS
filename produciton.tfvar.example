@@ -1,17 +1,21 @@
 # common
+ProjectName = "Drupal-Boom"
 awsRegion = "us-east-1"
 GenerateNewKeyPair = true
 KeyPairName = "myKeyPair"
-
-#Bastion
 
 BastionCount = 2
 BastionInstanceType = "t2.micro"
 BastionAsgNamePrefix = "Bastion-ASG"
 BastionHealthCheckType = "EC2"
 BastionTerminationPolicies = ["OldestLaunchTemplate"]
-
-
+BastionWaitForCapacityTimeout = 0
+BastionASGTagKey = "Name"
+BastionASGTagValue = "Bastion-ASG"
+BastionHealthCheckGracePeriod = 300
+BastionLTResourceType = "instance"
+BastionInstanceTagValue = "bastion"
+BastionLaunchTemplateName = "drupal-bastion-lt"
 # acm
 
 AcmCertDomain = "login.hyremaster.com"
@@ -22,15 +26,15 @@ RdsClusterIdentifier = "aurora-cluster-demo"
 RdsEngine = "aurora-mysql"
 RdsEngineVersion = "5.7.mysql_aurora.2.03.2"
 RdsAvailabilityZones = ["us-east-1a", "us-east-1b"]
-RdsDatabaseName = "bitnami_drupal"
-RdsMasterPassword = "12345678"
-RdsMasterUsername = "dbadmin"
+RdsDatabaseName = "master_database"
+RdsMasterPassword = "masterpassword"
+RdsMasterUsername = "masterusername"
 
 RdsInstanceCount =  2
 RdsIntanceIdentifierPrefix = "drupal-aurora"
 RdsInstanceClass = "db.t2.small"
 RdsSubnetGroupName = "aurora-drupal-subnet-gruoup"
-
+RdsSubnetGroupTagDescription = "Drupal Aurora  SubnetGroup"
 # bitnami ami
 DrupalAmiOwner = [ "679593333241" ]
 
@@ -40,7 +44,9 @@ FilterNameValues = ["bitnami-drupal-9.2.6-0-*"]
 EfsCreationToken = "drupal-efs"
 EfsPerformanceMode = "generalPurpose"
 IsEfsEncrypted = "true"
-
+EfsFileTags = {
+  "Name" = "DrupalEFS"
+}
 
  
 # LB
@@ -52,11 +58,17 @@ AlbTargetNamePrefix = "drp-lb"
 AlbPort = 80
 AlbProtocol = "HTTP"
 AlbTargetType = "instance"
+AlbHealthCheckInterval = 30
+AlbHealthCheckTimeout = 5
+AlbHealthyThreshold = 2
+AlbUnhealthyThreshold = 5
 AlbHealthCheckProtocol = "HTTP"
 EnableAlbStickiness = true
 AlbStickinessCookieName = "boom"
 AlbSticknessType = "lb_cookie"
-
+AlbTargetTags = {
+  "Name" = "Drupal-LB-Target-Group"
+}
 
 AlbListenerDefaultAction = "forward"
 AlbListenerHttpsPort = 443
@@ -76,16 +88,129 @@ Route53RecordTTL = "300"
 
 
 # SG
+BastionSecurityGroupNamePrefix = "bastion-sg"
+BastionSecurityGroupDescription = "Bastion Security Group"
 
+BastionIngressFromPort = 22
+BastionIngressToPort = 22
+BastionIngressProtocol = "tcp"
 BastionIngressCIDR = ["0.0.0.0/0"]
+
+BastionEgressFromPort = -1
+BastionEgressToPort = -1
+BastionEgressProtocol = "-1"
+BastionEgressCIDR = ["0.0.0.0/0"]
+BastionEgressDescription = "Allow all outbound traffic"
+
+WebServerSecurityGroupNamePrefix = "drupal-sg"
+WebServerSecurityGroupDescription = "Drupal Web Server Security Group"
+
+WebServerSSHIngressFromPort = 22
+WebServerSSHIngressToPort = 22
+WebServerSSHIngressProtocol = "tcp"
+
+WebServer443IngressFromPort = 443
+WebServer443IngressToPort = 443
+WebServer443IngressProtocol = "tcp"
+
+WebServer80IngressFromPort = 80
+WebServer80IngressToPort = 80
+WebServer80IngressProtocol = "tcp"
+
+WebServer80EgressCIDR = ["0.0.0.0/0"]
+WebServer80EgressFromPort= 80
+WebServer80EgressToPort = 80
+WebServer80EgressProtocol = "tcp"
+
+WebServer443EgressCIDR = ["0.0.0.0/0"]
+WebServer443EgressFromPort= 443
+WebServer443EgressToPort = 443
+WebServer443EgressProtocol = "tcp"
+
+
+WebServerEFSEgressFromPort= 2049
+WebServerEFSEgressToPort = 2049
+WebServerEFSEgressProtocol = "tcp"
+
+WebServerAuroraEgressFromPort = 3306
+WebServerAuroraEgressToPort = 3306
+WebServerAuroraEgressProtocol = "tcp"
+
+EFSSecurityGroupNamePrefix = "efs-sg"
+EFSSecurityGroupDescription = "EFS Security Group"
+
+EFSSecurityGroupIngressFromPort = 2049
+EFSSecurityGroupIngressToPort = 2049
+EFSSecurityGroupIngressProtocol = "tcp"
+
+AuroraSecurityGroupNamePrefix = "aurora-sg"
+AuroraSecurityGroupDescription = "Aurora Security Group"
+
+
+
+AuroraSecurityGroupIngressFromPort = 3306
+AuroraSecurityGroupIngressToPort = 3306
+AuroraSecurityGroupIngressProtocol = "tcp"
+
+ALBSecurityGroupNamePrefix = "alb-sg"
+ALBSecurityGroupDescription = "Drupal ALB Security Group"
+
+ALBSecurityGroup80IngressFromPort = 80
+ALBSecurityGroup80IngressToPort = 80
+ALBSecurityGroup80IngressProtocol = "tcp"
+ALBSecurityGroup80IngressCIDR = [ "0.0.0.0/0" ]
+
+ALBSecurityGroup443IngressFromPort = 443
+ALBSecurityGroup443IngressToPort = 443
+ALBSecurityGroup443IngressProtocol = "tcp"
+ALBSecurityGroup443IngressCIDR = ["0.0.0.0/0"]
+
+ALBSecurityGroup80EgressFromPort = 80
+ALBSecurityGroup80EgressToPort = 80
+ALBSecurityGroup80EgressProtocol = "tcp"
+
+ALBSecurityGroup443EgressFromPort = 443
+ALBSecurityGroup443EgressToPort = 443
+ALBSecurityGroup443EgressProtocol = "tcp"
 # vpc
 vpcCIDR = "10.0.0.0/16"
 vpcInstanceTenancy = "default"
-
+VPCEnableDnsHostnames = true
+VPCEnableDnsSupport = true
+VPCTags = {
+  "Name" = "Drupal VPC"
+}
+#IGW
+IGWTags = {
+  "Name" = "Drupal IGW"
+}
+#nat
+NATGatewayTags = {
+  "Name" = "Drupal NatGateway"
+}
+# Subnet
+PublicSubnetTags = {
+  "Name" = "Drupal Public Subnet"
+}
+PrivateSubnetTags = {
+  "Name" = "Drupal Private Subnet"
+}
 # route tables
 
 PublicRouteTableCIDR ="0.0.0.0/0"
 PrivateRouteTableCIDR ="0.0.0.0/0"
+PublicRouteTableTags = {
+  "Name" = "Drupal Public Route Table"
+}
+PrivateRouteTableTags = {
+  "Name" = "Drupal Private Route Table"
+}
+
+
+#web server instances
+WebServerASGNamePrefix = "drupal-asg"
+WebServerASGTagKey = "Name"
+WebServerASGTagValue = "Drupal Web Server ASG"
 
 MaxInstances = 2
 MinInstances = 2
@@ -95,8 +220,22 @@ InstanceTerminaitonPolicies = [ "OldestLaunchTemplate" ]
 InstanceHealthCheckGracePeriod = 300
 InstanceHealthCheckTimeout = 0
 
+#iam
+IAMRoleTags = {
+  "Name" = "drupal iam role"
+}
+IAMRoleName = "drupal-iam-role"
+IAMInstanceProfileName = "drupal-iam-instance-profile"
 
+WebServerInstanceType = "t2.micro"
 
+WebServerInstanceTags = {
+  "Name" = "Drupal Web Server"
+}
+WebServerASGTags = {
+    "Name" : "drupal-webserver-lt",
 
+    "Project" : "drupal"
 
+}
 
