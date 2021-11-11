@@ -24,7 +24,9 @@ resource "aws_autoscaling_group" "webserver" {
     aws_efs_file_system.efs, aws_efs_mount_target.efs-mt
   ]
 
-  tags = [{
-    Name : "webserver"
-  }]
+  tag {
+    key                 = "Name"
+    value               = "webserver-asg"
+    propagate_at_launch = true
+  }
 }

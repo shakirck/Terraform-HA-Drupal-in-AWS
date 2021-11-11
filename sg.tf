@@ -1,33 +1,33 @@
 # Bastion
 resource "aws_security_group" "bastion" {
-  name_prefix = "bastion-sg"
-  description = "Firewall for the operator bastion instance"
+  name_prefix = var.BastionSecurityGroupNamePrefix
+  description = var.BastionSecurityGroupDescription
   vpc_id      = aws_vpc.vpc.id
 
 }
 resource "aws_security_group_rule" "bastion_ssh_ingress" {
   type              = "ingress"
-  from_port         = 22
-  to_port           = 22
-  protocol          = "tcp"
+  from_port         = var.BastionIngressFromPort
+  to_port           = var.BastionIngressToPort
+  protocol          = var.BastionIngressProtocol
   cidr_blocks       = var.BastionIngressCIDR
   security_group_id = aws_security_group.bastion.id
 }
 resource "aws_security_group_rule" "bastion_allow_outbound" {
   security_group_id = aws_security_group.bastion.id
   type              = "egress"
-  protocol          = "-1"
-  from_port         = -1
-  to_port           = -1
-  cidr_blocks       = ["0.0.0.0/0"]
-  description       = "Allow any outbound traffic."
+  protocol          = var.BastionEgressProtocol
+  from_port         = var.BastionEgressFromPort
+  to_port           = var.BastionEgressFromPort
+  cidr_blocks       = var.BastionEgressCIDR
+  description       = var.BastionEgressDescription
 }
 
 #webserver 
 
 resource "aws_security_group" "webserver" {
-  name_prefix = "webserver-sg"
-  description = "App Server Security Group"
+  name_prefix = var.WebServerSecurityGroupNamePrefix
+  description = var.WebServerSecurityGroupDescription
   vpc_id      = aws_vpc.vpc.id
 
 }

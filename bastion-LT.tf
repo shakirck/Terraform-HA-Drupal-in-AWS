@@ -1,5 +1,5 @@
 resource "aws_launch_template" "bastion" {
-  image_id      = data.aws_ami.latest-ubuntu.id
+  image_id      = data.aws_ami.amazon_linux2.id
   instance_type = var.BastionInstanceType
   user_data     = ""
   key_name      = var.KeyPairName
@@ -10,35 +10,39 @@ resource "aws_launch_template" "bastion" {
     associate_public_ip_address = true
   }
   tag_specifications {
-    resource_type = "instance"
+    resource_type = var.BastionLTResourceType
 
     tags = {
-      Name = "bastion"
+      Name = var.BastionInstanceTagValue
     }
   }
 
 
   tags = {
 
-    Name : "drupal- basiton-lt",
+    Name : var.BastionLaunchTemplateName,
 
-    Project : "drupal"
+    Project : var.ProjectName,
 
   }
 
 
 }
-data "aws_ami" "latest-ubuntu" {
+data "aws_ami" "amazon_linux2" {
   most_recent = true
-  owners      = ["099720109477"] # Canonical
 
   filter {
     name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-*"]
+    values = ["amzn2-ami-hvm*"]
   }
 
   filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
+    name   = "architecture"
+    values = ["x86_64"]
   }
+  filter {
+    name   = "owner-alias"
+    values = ["amazon"]
+  }
+  owners = ["amazon"]
 }

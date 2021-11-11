@@ -1,6 +1,10 @@
+variable "ProjectName" {
+  type = string
+}
 variable "BastionCount" {
   type = number
 }
+# Bastion
 variable "BastionInstanceType" {
   type = string
 }
@@ -13,8 +17,24 @@ variable "BastionHealthCheckType" {
 variable "BastionTerminationPolicies" {
   type = list(string)
 }
-
-
+variable "BastionHealthCheckGracePeriod" {
+  type = number
+}
+variable "BastionASGTagKey" {
+  type = string
+}
+variable "BastionASGTagValue" {
+  type = string
+}
+variable "BastionLTResourceType" {
+  type = string
+}
+variable "BastionInstanceTagValue" {
+  type = string
+}
+variable "BastionLaunchTemplateName" {
+  type = string
+}
 # ACM
 variable "AcmCertDomain" {
   type = string
@@ -61,6 +81,9 @@ variable "RdsSubnetGroupName" {
   type = string
 }
 
+variable "RdsSubnetGroupTagDescription" {
+  type = string
+}
 
 # Bitnamiami
 variable "DrupalAmiOwner" {
@@ -81,7 +104,9 @@ variable "EfsPerformanceMode" {
 variable "IsEfsEncrypted" {
   type = string
 }
-
+variable "EfsFileTags" {
+  type = map(string)
+}
 #LB
 variable "LoadBalancerName" {
   type = string
@@ -159,11 +184,52 @@ variable "Route53RecordTTL" {
 
 
 
-# SG
+# security groups
+
+variable "BastionIngressFromPort" {
+  type = number
+}
+variable "BastionIngressToPort" {
+  type = number
+}
+variable "BastionIngressProtocol" {
+  type = string
+}
+variable "BastionSecurityGroupNamePrefix" {
+  type = string
+}
+variable "BastionSecurityGroupDescription" {
+  type = string
+}
+
 variable "BastionIngressCIDR" {
   type = list(string)
 }
 
+variable "BastionEgressFromPort" {
+  type = number
+}
+variable "BastionEgressToPort" {
+  type = number
+}
+
+variable "BastionEgressProtocol" {
+  type = string
+}
+
+variable "BastionEgressCIDR" {
+  type = list(string)
+}
+variable "BastionEgressDescription" {
+  type = string
+}
+
+variable "WebServerSecurityGroupNamePrefix" {
+  type = string
+}
+variable "WebServerSecurityGroupDescription" {
+  type = string
+}
 
 
 # vpc

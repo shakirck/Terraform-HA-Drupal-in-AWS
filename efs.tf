@@ -3,10 +3,7 @@ resource "aws_efs_file_system" "efs" {
   creation_token   = var.EfsCreationToken
   performance_mode = var.EfsPerformanceMode
   encrypted        = var.IsEfsEncrypted
-  tags = {
-    Name = "LAMP EFS Shared Filesystem For Drupal"
-  }
-
+  tags             = var.EfsFileTags
 }
 
 resource "aws_efs_mount_target" "efs-mt" {

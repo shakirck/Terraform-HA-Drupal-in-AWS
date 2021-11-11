@@ -14,14 +14,16 @@ resource "aws_autoscaling_group" "bastion" {
 
   vpc_zone_identifier = aws_subnet.public_subnets.*.id
 
-  health_check_grace_period = 300
+  health_check_grace_period = var.BastionHealthCheckGracePeriod
   health_check_type         = var.BastionHealthCheckType
   termination_policies      = var.BastionTerminationPolicies
   wait_for_capacity_timeout = 0
 
 
 
-  tags = [{
-    Name : "Bastion"
-  }]
+  tag {
+    key                 = var.BastionASGTagKey
+    value               = var.BastionASGTagValue
+    propagate_at_launch = true
+  }
 }

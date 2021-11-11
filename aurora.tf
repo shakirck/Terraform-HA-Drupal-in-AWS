@@ -31,6 +31,6 @@ resource "aws_db_subnet_group" "default" {
   subnet_ids = aws_subnet.private_subnets.*.id
 
   tags = {
-    Name = "Drupal Aurora DB subnet group"
+    Description = var.RdsSubnetGroupTagDescription
   }
 }
