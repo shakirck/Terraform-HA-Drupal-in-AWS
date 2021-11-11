@@ -5,7 +5,6 @@ resource "aws_iam_instance_profile" "main_drupal" {
 
 resource "aws_iam_role" "main_drupal" {
   name = var.IAMRoleName
-
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -21,7 +20,6 @@ resource "aws_iam_role" "main_drupal" {
   ]
 }
 EOF
-
   tags = var.IAMRoleTags
 }
 

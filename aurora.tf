@@ -9,12 +9,10 @@ resource "aws_rds_cluster" "default" {
   #   backup_retention_period = 0
   vpc_security_group_ids = [aws_security_group.aurora_rds.id]
   #   preferred_backup_window = "07:00-09:00"
-  #   storage encrypted
-  # 
+  #   storage encrypted = true  
   skip_final_snapshot  = true
   apply_immediately    = true
   db_subnet_group_name = aws_db_subnet_group.default.name
-
 }
 resource "aws_rds_cluster_instance" "cluster_instances" {
   count                = var.RdsInstanceCount
@@ -29,7 +27,6 @@ resource "aws_rds_cluster_instance" "cluster_instances" {
 resource "aws_db_subnet_group" "default" {
   name       = var.RdsSubnetGroupName
   subnet_ids = aws_subnet.private_subnets.*.id
-
   tags = {
     Description = var.RdsSubnetGroupTagDescription
   }

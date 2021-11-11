@@ -19,22 +19,16 @@ resource "aws_internet_gateway" "igw" {
 
 resource "aws_subnet" "public_subnets" {
   vpc_id = aws_vpc.vpc.id
-
-
   count = var.MaxInstances
-
   cidr_block              = cidrsubnet(aws_vpc.vpc.cidr_block, 4, count.index)
   availability_zone       = data.aws_availability_zones.available.names[count.index]
   map_public_ip_on_launch = true
-
   assign_ipv6_address_on_creation = false
   tags                            = var.PublicSubnetTags
 }
 resource "aws_subnet" "private_subnets" {
   vpc_id = aws_vpc.vpc.id
   count  = var.MaxInstances
-
-
   cidr_block        = cidrsubnet(aws_vpc.vpc.cidr_block, 4, count.index + var.MaxInstances)
   availability_zone = data.aws_availability_zones.available.names[count.index]
   tags              = var.PrivateSubnetTags
@@ -57,7 +51,6 @@ resource "aws_route_table" "private_rt" {
     cidr_block = var.PrivateRouteTableCIDR
     gateway_id = aws_nat_gateway.main_nat[count.index].id
   }
-
   tags = var.PrivateRouteTableTags
 }
 
@@ -73,9 +66,7 @@ resource "aws_nat_gateway" "main_nat" {
   count         = var.MaxInstances
   allocation_id = aws_eip.nat_eip[count.index].id
   subnet_id     = aws_subnet.public_subnets[count.index].id
-
   tags = var.NATGatewayTags
-
   # To ensure proper ordering, it is recommended to add an explicit dependency
   # on the Internet Gateway for the VPC.
   depends_on = [aws_internet_gateway.igw]

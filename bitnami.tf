@@ -4,7 +4,6 @@ data "aws_ami" "bitnami" {
   most_recent = true
   filter {
     name = "name"
-    # values = ["bitnami-drupal-*"] bitnami-drupal-9.2.6-0-
     values = var.FilterNameValues
   }
   filter {
