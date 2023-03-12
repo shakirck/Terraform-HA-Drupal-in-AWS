@@ -1,5 +1,5 @@
 # common
-ProjectName = "Drupal-Boom"
+ProjectName = "Drupal"
 awsRegion = "us-east-1"
 GenerateNewKeyPair = true
 KeyPairName = "myKeyPair"
@@ -18,7 +18,7 @@ BastionInstanceTagValue = "bastion"
 BastionLaunchTemplateName = "drupal-bastion-lt"
 # acm
 
-AcmCertDomain = "login.hyremaster.com"
+AcmCertDomain = "log.example.com"
 AcmCertStatuses = ["ISSUED"]
 
 # Aurora
@@ -64,7 +64,7 @@ AlbHealthyThreshold = 2
 AlbUnhealthyThreshold = 5
 AlbHealthCheckProtocol = "HTTP"
 EnableAlbStickiness = true
-AlbStickinessCookieName = "boom"
+AlbStickinessCookieName = "example_cookie_name"
 AlbSticknessType = "lb_cookie"
 AlbTargetTags = {
   "Name" = "Drupal-LB-Target-Group"
@@ -79,8 +79,8 @@ AlbListenerHttpsSslPolicy = "ELBSecurityPolicy-FS-2018-06"
 AlbListenerHttpProtocol = "HTTP"
  
 # route
-HostedZoneName = "hyremaster.com"
-Route53RecordName = "login.hyremaster.com"
+HostedZoneName = "example.com"
+Route53RecordName = "login.example.com"
 Route53RecordType = "CNAME"
 Route53RecordTTL = "300"
 
